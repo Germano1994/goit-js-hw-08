@@ -1,39 +1,26 @@
 // Add imports above this line
+
+import SimpleLightbox from "simplelightbox";
+import "simplelightbox/dist/simple-lightbox.min.css";
+
 import { galleryItems } from './gallery-items';
 // Change code below this line
 
-console.log(galleryItems);
+const galleryMarkup = galleryItems.map(item => `
+<div class="gallery__item">
+<a class="gallery__link" href="${item.original}">
+<img class="gallery__image" src="${item.preview}" data-source="${item.original}" alt="${item.description}"/>
+</a>
+</div>
+`).join('');
 
-import SimpleLightbox from 'simplelightbox/dist/simple-lightbox';
-import 'simplelightbox/dist/simple-lightbox.min.css';
+const gallery = document.querySelector('.gallery');
+gallery.insertAdjacentHTML('beforeend', galleryMarkup);
 
-
-const collection = document.querySelector('.gallery');
-
-const listItems = galleryItems.map(({ preview, original, description }) =>
-  `<li class="gallery__item">
-    <a class="gallery__link" href="${original}">
-      <img
-        class="gallery__image"
-        src="${preview}"
-        data-source="${original}"
-        alt="${description}"
-      />
-    </a>
-  </li>`
-).join('');
-
-collection.insertAdjacentHTML('afterbegin', listItems);
-
-collection.addEventListener('click', (event) => {
-  event.preventDefault();
-
-  if (!event.target.classList.contains('gallery__image')) {
-    return;
-  }
-
-  const largeImageUrl = event.target.dataset.source;
-  const lightbox = SimpleLightbox.create(`<img src="${largeImageUrl}" />`).show();
-
+new SimpleLightbox('.gallery a',{
+    captionDelay: 250,
+    captionsData: 'alt',
 });
+
+console.log(galleryItems);
   
